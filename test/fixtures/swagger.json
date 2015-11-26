@@ -1,0 +1,886 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"version": "1.0.0",
+		"title": "Sample API",
+		"description": "Sample fixture"
+	},
+	"host": "api.sample.eu",
+	"basePath": "/v3",
+	"tags": [
+		{
+			"name": "sample",
+			"description": "Sample tag"
+		}
+	],
+	"schemes": [
+		"https"
+	],
+	"produces": [
+		"application/json"
+	],
+	"paths": {
+		"/sample/path": {
+			"post": {
+				"tags": [
+					"sample"
+				],
+				"consumes": [
+					"application/x-www-form-urlencoded"
+				],
+				"parameters": [
+					{
+						"name": "sample",
+						"in": "formData",
+						"description": "Some data.",
+						"type": "string",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "A sample response",
+						"schema": {
+							"$ref": "#/definitions/Token"
+						}
+					},
+					"401": {
+						"description": "Invalid credentials."
+					}
+				}
+			}
+		}
+	},
+	"definitions": {
+		"Token": {
+			"properties": {
+				"token": {
+					"type": "string"
+				},
+				"expires": {
+					"type": "string",
+					"format": "date-time"
+				}
+			}
+		},
+		"PortalItem": {
+			"properties": {
+				"title": {
+					"type": "string"
+				},
+				"source": {
+					"type": "string"
+				},
+				"publicationDate": {
+					"type": "string",
+					"format": "date-time"
+				},
+				"image": {
+					"type": "string"
+				},
+				"imageUrl": {
+					"type": "string"
+				},
+				"bodyText": {
+					"type": "string"
+				}
+			}
+		},
+		"User": {
+			"properties": {
+				"userId": {
+					"type": "string"
+				},
+				"groupId": {
+					"type": "string",
+					"label": "Groep",
+					"sampleReferenceTo": "Group"
+				},
+				"userName": {
+					"label": "E-mail",
+					"type": "string",
+					"minLength": 5
+				},
+				"displayName": {
+					"label": "Naam",
+					"type": "string",
+					"minLength": 2
+				},
+				"roles": {
+					"label": "Rechten",
+					"type": "array",
+					"items": {
+						"type": "string",
+						"enum": [
+							"Beheerder",
+							"CollegaMappen",
+							"Dashboard",
+							"EigenArchief",
+							"Facturen",
+							"Handleidingen",
+							"Havenbedrijf",
+							"Instellingen",
+							"Klantenservice",
+							"LeeskostenVoorVerzender",
+							"Mappen",
+							"Nieuwsbrief",
+							"OnlineArchief",
+							"Portaal",
+							"PrintArchief",
+							"Uitgevers",
+							"WICArchief"
+						]
+					}
+				},
+				"customerLinkIds": {
+					"label": "Debiteurnummer",
+					"type": "array",
+					"items": {
+						"type": "string",
+						"sampleReferenceTo": "Customer"
+					},
+					"required": true,
+					"minItems": 1
+				},
+				"showAdvancedSearch": {
+					"label": "Tonen knop uitgebreid zoeken",
+					"type": "boolean"
+				},
+				"minRelevance": {
+					"label": "Minimale relevantie",
+					"type": "integer"
+				},
+				"showContent": {
+					"label": "Samenvatting op basis van",
+					"type": "string",
+					"enum": [
+						"nosummary",
+						"concept",
+						"context",
+						"quick"
+					],
+					"enumTitles": [
+						"Geen samenvatting",
+						"Tekstueel verband",
+						"Conceptueel",
+						"Verkorte tekst"
+					]
+				},
+				"sorting": {
+					"label": "Sorteren",
+					"type": "string",
+					"enum": [
+						"notsorted",
+						"newfirst",
+						"oldfirst",
+						"relevance",
+						"publicationalphabetical",
+						"titlealphabetical"
+					]
+				},
+				"rssNoOfChars": {
+					"label": "Aantal karakters (-1 = alles, 0 = geen)",
+					"type": "integer",
+					"minimum": -1
+				},
+				"rssNoPerRequest": {
+					"label": "Aantal artikelen per request",
+					"type": "integer"
+				},
+				"rssOrderBy": {
+					"label": "Sorteren op",
+					"type": "string",
+					"enum": [
+						"dateInserted",
+						"rssRelevance"
+					],
+					"enumTitles": [
+						"Datum toegevoegd",
+						"Relevantie"
+					]
+				},
+				"rssShowAddFields": {
+					"label": "Toon extra velden",
+					"type": "boolean"
+				},
+				"rssWantClip": {
+					"label": "Kranten en tijdschriften tonen",
+					"type": "boolean"
+				},
+				"rssWantWeb": {
+					"label": "Internet artikelen tonen",
+					"type": "boolean"
+				},
+				"rssWantRTV": {
+					"label": "RTV tonen",
+					"type": "boolean"
+				},
+				"showNumResults": {
+					"label": "Maximaal te tonen resultaten",
+					"type": "integer"
+				},
+				"showRating": {
+					"label": "Ik wil artikelen beoordelen",
+					"type": "boolean"
+				},
+				"showRelevance": {
+					"label": "Laat relevantie zien",
+					"type": "boolean"
+				},
+				"showSentiment": {
+					"label": "Ik wil sentiment toekennen aan artikelen",
+					"type": "boolean"
+				},
+				"defaultSource": {
+					"label": "Bron",
+					"type": "string",
+					"enum": [
+						"none",
+						"archive_own",
+						"archive_print",
+						"archive_web",
+						"archive_wic"
+					]
+				},
+				"dragDropBehaviour": {
+					"label": "Verplaatsen / Kopiëren",
+					"type": "string",
+					"enum": [
+						"ddMove",
+						"ddCopy"
+					],
+					"enumTitles": [
+						"Verplaatsen",
+						"Kopiëren"
+					]
+				},
+				"editorialNoOfChars": {
+					"type": "integer",
+					"minimum": -1,
+					"label": "Maximaal aantal tekens preview (-1 = alles, 0 = geen)"
+				}
+			}
+		},
+		"Customer": {
+			"properties": {
+				"customerLinkId": {
+					"type": "string",
+					"sampleReferenceTo": "Customer"
+				},
+				"groupId": {
+					"type": "string",
+					"label": "Groep",
+					"sampleReferenceTo": "Group"
+				},
+				"customerNo": {
+					"type": "integer",
+					"label": "Debiteurnummer",
+					"minimum": 1,
+					"required": true
+				},
+				"customerName": {
+					"type": "string",
+					"label": "Debiteurnaam",
+					"minLength": 1,
+					"required": true
+				},
+				"defaultSenderPays": {
+					"type": "boolean"
+				},
+				"twitterHashTags": {
+					"type": "string",
+					"label": "Twitter hashtags"
+				}
+			}
+		},
+		"Group": {
+			"properties": {
+				"groupId": {
+					"type": "string",
+					"sampleReferenceTo": "Group"
+				},
+				"groupName": {
+					"type": "string",
+					"label": "Groep",
+					"minLength": 1,
+					"required": true
+				},
+				"autonomyKey": {
+					"type": "string",
+					"label": "Autonomy account"
+				},
+				"roles": {
+					"label": "Maximaal beschikbare rechten",
+					"type": "array",
+					"items": {
+						"type": "string",
+						"enum": [
+							"Beheerder",
+							"CollegaMappen",
+							"Dashboard",
+							"EigenArchief",
+							"Facturen",
+							"Handleidingen",
+							"Havenbedrijf",
+							"Instellingen",
+							"LeeskostenVoorVerzender",
+							"Mappen",
+							"Nieuwsbrief",
+							"OnlineArchief",
+							"Portaal",
+							"PrintArchief",
+							"Uitgevers",
+							"WICArchief"
+						]
+					}
+				},
+				"traceBuzzCustomer": {
+					"type": "integer",
+					"minimum": 0,
+					"label": "Tracebuzz klantnummer"
+				}
+			}
+		},
+		"Invoice": {
+			"properties": {
+				"invoiceNo": {
+					"type": "integer"
+				},
+				"invoiceDate": {
+					"type": "string",
+					"format": "date"
+				},
+				"lines": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/InvoiceLine"
+					}
+				},
+				"details": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/InvoiceDetails"
+					}
+				}
+			}
+		},
+		"InvoiceLine": {
+			"properties": {
+				"invoceLineDescription": {
+					"type": "string"
+				},
+				"numberOfClippings": {
+					"type": "integer"
+				},
+				"numberOfClippingPages": {
+					"type": "integer"
+				},
+				"itemPrice": {
+					"type": "number"
+				},
+				"netAmount": {
+					"type": "number"
+				},
+				"vat": {
+					"type": "number",
+					"description": "The vat percentage applicable"
+				}
+			}
+		},
+		"InvoiceDetails": {
+			"properties": {
+				"searchName": {
+					"type": "string"
+				},
+				"searchDescription": {
+					"type": "string"
+				},
+				"publicationName": {
+					"type": "string"
+				},
+				"publicationDate": {
+					"type": "string",
+					"format": "date"
+				},
+				"clippingSequence": {
+					"type": "integer"
+				},
+				"numberOfClippingPages": {
+					"type": "integer"
+				},
+				"netAmount": {
+					"type": "number"
+				},
+				"royaltyNetAmount": {
+					"type": "number"
+				},
+				"numberOfLinkedArticles": {
+					"type": "number"
+				},
+				"linkedArticlesNetAmount": {
+					"type": "number"
+				}
+			}
+		},
+		"SearchRequest": {
+			"properties": {
+				"match_text": {
+					"type": "string"
+				},
+				"match_headline": {
+					"type": "string"
+				},
+				"match_subtitle": {
+					"type": "string"
+				},
+				"match_photocredit": {
+					"type": "string"
+				},
+				"match_cutline": {
+					"type": "string"
+				},
+				"match_author": {
+					"type": "string"
+				},
+				"archive_own": {
+					"type": "boolean",
+					"default": true
+				},
+				"archive_print": {
+					"type": "boolean",
+					"default": false
+				},
+				"archive_web": {
+					"type": "boolean",
+					"default": false
+				},
+				"archive_wic": {
+					"type": "boolean",
+					"default": false
+				},
+				"startdate": {
+					"type": "string",
+					"format": "date"
+				},
+				"enddate": {
+					"type": "string",
+					"format": "date"
+				},
+				"return_publicationtype": {
+					"type": "boolean",
+					"default": true
+				},
+				"return_publicationname": {
+					"type": "boolean",
+					"default": true
+				},
+				"return_publicationarea": {
+					"type": "boolean",
+					"default": false
+				},
+				"return_publisher": {
+					"type": "boolean",
+					"default": true
+				},
+				"return_surface": {
+					"type": "boolean",
+					"default": false
+				},
+				"return_mediavalue": {
+					"type": "boolean",
+					"default": false
+				},
+				"return_headline": {
+					"type": "boolean",
+					"default": true
+				},
+				"return_subtitle": {
+					"type": "boolean",
+					"default": false
+				},
+				"return_author": {
+					"type": "boolean",
+					"default": false
+				},
+				"return_photocredit": {
+					"type": "boolean",
+					"default": false
+				},
+				"return_cutline": {
+					"type": "boolean",
+					"default": false
+				},
+				"return_body": {
+					"type": "boolean",
+					"default": false
+				},
+				"maxresults": {
+					"type": "integer",
+					"minimum": 1,
+					"maximum": 10000,
+					"default": 6
+				},
+				"minrelevance": {
+					"type": "number",
+					"minimum": 1,
+					"maximum": 100
+				},
+				"sortType": {
+					"type": "string",
+					"default": "relevance",
+					"enum": [
+						"notsorted",
+						"newfirst",
+						"oldfirst",
+						"relevance",
+						"publicationalphabetical",
+						"titlealphabetical"
+					]
+				},
+				"summarytype": {
+					"type": "string",
+					"default": "nosummary",
+					"enum": [
+						"nosummary",
+						"concept",
+						"context",
+						"quick"
+					],
+					"enumTitles": [
+						"Geen samenvatting",
+						"Tekstueel verband",
+						"Conceptueel",
+						"Verkorte tekst"
+					]
+				}
+			},
+			"required": [
+				"match_text",
+				"startdate",
+				"enddate"
+			]
+		},
+		"SearchResult": {
+			"properties": {
+				"searchId": {
+					"type": "string"
+				},
+				"archiveType": {
+					"type": "string"
+				},
+				"summary": {
+					"type": "string"
+				},
+				"relevance": {
+					"type": "number"
+				},
+				"publicationType": {
+					"type": "string"
+				},
+				"publicationName": {
+					"type": "string"
+				},
+				"publicationDate": {
+					"type": "string"
+				},
+				"publicationFrequency": {
+					"type": "string"
+				},
+				"publicationCirculation": {
+					"type": "string"
+				},
+				"publicationArea": {
+					"type": "string"
+				},
+				"publisher": {
+					"type": "string"
+				},
+				"surface": {
+					"type": "string"
+				},
+				"mediavalue": {
+					"type": "string"
+				},
+				"headline": {
+					"type": "string"
+				},
+				"subtitle": {
+					"type": "string"
+				},
+				"author": {
+					"type": "string"
+				},
+				"photocredit": {
+					"type": "string"
+				},
+				"cutline": {
+					"type": "string"
+				},
+				"body": {
+					"type": "string"
+				}
+			}
+		},
+		"Agent": {
+			"properties": {
+				"userId": {
+					"type": "string"
+				},
+				"agentId": {
+					"type": "string"
+				},
+				"agentName": {
+					"label": "Omschrijving",
+					"type": "string"
+				},
+				"queryText": {
+					"type": "string",
+					"label": "Zoekopdracht"
+				},
+				"relevance": {
+					"type": "integer",
+					"label": "Minimale relevantie"
+				},
+				"sourcePrint": {
+					"type": "boolean",
+					"label": "Zoek in print"
+				},
+				"sourceInternet": {
+					"type": "boolean",
+					"label": "Zoek in web"
+				},
+				"sourceRTV": {
+					"type": "boolean",
+					"label": "Zoek in rtv"
+				},
+				"sourceOwn": {
+					"type": "boolean",
+					"label": "Zoek in bedrijfsmappen"
+				},
+				"folderId": {
+					"type": "string"
+				},
+				"sorting": {
+					"type": "string",
+					"label": "Wijze van sorteren",
+					"enum": [
+						"notsorted",
+						"newfirst",
+						"oldfirst",
+						"relevance",
+						"publicationalphabetical",
+						"titlealphabetical"
+					]
+				}
+			}
+		},
+		"PublisherTransactions": {
+			"properties": {
+				"customerNo": {
+					"type": "integer"
+				},
+				"publications": {
+					"type": "array",
+					"items": {
+						"properties": {
+							"publicationDate": {
+								"type": "string",
+								"format": "date"
+							},
+							"articles": {
+								"type": "array",
+								"items": {
+									"properties": {
+										"searchId": {
+											"type": "string"
+										},
+										"title": {
+											"type": "string"
+										},
+										"transactions": {
+											"type": "array",
+											"items": {
+												"properties": {
+													"transactionDate": {
+														"type": "string",
+														"format": "date-time"
+													},
+													"numberSold": {
+														"type": "number"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"Folder": {
+			"properties": {
+				"folderId": {
+					"type": "string"
+				},
+				"userDisplayName": {
+					"type": "string"
+				},
+				"customerLinkId": {
+					"type": "string"
+				},
+				"parentFolderId": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"description": {
+					"type": "string"
+				},
+				"itemCount": {
+					"type": "integer"
+				},
+				"readCount": {
+					"type": "integer"
+				},
+				"nicAttached": {
+					"type": "boolean"
+				},
+				"agentAttached": {
+					"type": "boolean"
+				},
+				"hasRSSFeed": {
+					"type": "boolean"
+				},
+				"rssUrl": {
+					"type": "string"
+				},
+				"scheduledDate": {
+					"type": "string",
+					"format": "date"
+				}
+			}
+		},
+		"FolderItem": {
+			"properties": {
+				"folderId": {
+					"type": "string"
+				},
+				"userId": {
+					"type": "string"
+				},
+				"userFolderItemId": {
+					"type": "string"
+				},
+				"mediaItemType": {
+					"type": "string"
+				},
+				"dateInserted": {
+					"type": "string",
+					"format": "date"
+				},
+				"itemOrder": {
+					"type": "integer"
+				},
+				"relevance": {
+					"type": "number"
+				},
+				"rating": {
+					"type": "number"
+				},
+				"times": {
+					"type": "integer"
+				},
+				"sentiment": {
+					"type": "integer"
+				},
+				"folderItemRead": {
+					"type": "boolean"
+				},
+				"source": {
+					"type": "string"
+				},
+				"title": {
+					"type": "string"
+				},
+				"publicationDate": {
+					"type": "string",
+					"format": "date"
+				},
+				"circulation": {
+					"type": "integer"
+				},
+				"mediavalue": {
+					"type": "number"
+				},
+				"pagesequence": {
+					"type": "integer"
+				},
+				"url": {
+					"type": "string"
+				},
+				"body": {
+					"type": "string"
+				}
+			}
+		},
+		"RSS": {
+			"properties": {
+				"title": {
+					"type": "string",
+					"minLength": 1
+				},
+				"url": {
+					"type": "string",
+					"minLength": 12
+				}
+			},
+			"required": [
+				"title",
+				"url"
+			]
+		},
+		"NewsletterSubscriberGroup": {
+			"properties": {
+				"newsletterSubscriberGroupId": {
+					"type": "string",
+					"minLength": 1
+				},
+				"title": {
+					"type": "string",
+					"minLength": 1
+				}
+			},
+			"required": [
+				"title"
+			]
+		},
+		"NewsletterSubscriber": {
+			"properties": {
+				"newsletterSubscriberId": {
+					"type": "string",
+					"minLength": 1
+				},
+				"newsletterSubscriberGroupId": {
+					"type": "string",
+					"minLength": 1
+				},
+				"emailAddress": {
+					"type": "string",
+					"format": "email",
+					"minLength": 1
+				},
+				"title": {
+					"type": "string",
+					"minLength": 1
+				}
+			},
+			"required": [
+				"emailAddress",
+				"title"
+			]
+		}
+	}
+}
