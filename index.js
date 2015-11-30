@@ -36,18 +36,24 @@ function getSequalizeType(swaggerPropertySchema) {
 		return Sequelize.BLOB
 	}
 
+	// as seen http://swagger.io/specification/#dataTypeType
 	switch ((typeof swaggerPropertySchema === 'string') ? swaggerPropertySchema : swaggerPropertySchema.type) {
-		case 'byte':
-		case 'binary':
-			return Sequelize.STRING.BINARY;
-
-		case 'date':
-		case 'dateTime':
-			return Sequelize.DATE;
-
-		case 'password':
 		case 'string':
-			return Sequelize.STRING;
+			switch (swaggerPropertySchema.format || "") {
+				case 'byte':
+				case 'binary':
+					return Sequelize.STRING.BINARY;
+
+				case 'date':
+					return Sequelize.DATE;
+
+				case 'date-time':
+					//return Sequelize.DATETIME; //not working?
+					return Sequelize.DATE;
+
+				default:
+					return Sequelize.STRING;
+			}
 
 		case 'array':
 			if (dialect === 'postgres') {
@@ -61,17 +67,22 @@ function getSequalizeType(swaggerPropertySchema) {
 			return Sequelize.BOOLEAN;
 
 		case 'integer':
-			return Sequelize.INTEGER;
+			switch (swaggerPropertySchema.format || "") {
+				case 'int32':
+					return Sequelize.INTEGER;
 
-		case 'long':
-			return Sequelize.BIGINT;
+				default:
+					return Sequelize.BIGINT;
+			}
 
 		case 'number':
-		case 'float':
-			return Sequelize.FLOAT;
+			switch (swaggerPropertySchema.format || "") {
+				case 'float':
+					return Sequelize.FLOAT;
 
-		case 'double':
-			return Sequelize.DOUBLE;
+				default:
+					return Sequelize.DOUBLE;
+			}
 
 		default:
 			console.log('Warning: encountered', JSON.stringify(swaggerPropertySchema));
