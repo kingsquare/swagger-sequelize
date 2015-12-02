@@ -1,3 +1,18 @@
+/**
+ * @namespace
+ * @property {object} Sequelize
+ * @property {function} Sequelize.BLOB
+ * @property {function} Sequelize.ENUM
+ * @property {function} Sequelize.STRING
+ * @property {function} Sequelize.STRING.BINARY
+ * @property {function} Sequelize.DATE
+ * @property {function} Sequelize.ARRAY
+ * @property {function} Sequelize.BOOLEAN
+ * @property {function} Sequelize.DOUBLE
+ * @property {function} Sequelize.FLOAT
+ * @property {function} Sequelize.INTEGER
+ * @property {function} Sequelize.BIGINT
+ */
 var Sequelize = require('sequelize');
 
 var dialect = 'mysql';
@@ -15,6 +30,12 @@ function setDialect(newDialect) {
 /**
  *
  * @param {Object|string} swaggerPropertySchema
+ * @param {Object} swaggerPropertySchema.properties
+ * @param {Object} swaggerPropertySchema.$ref
+ * @param {Array} swaggerPropertySchema.enum
+ * @param {string} swaggerPropertySchema.type
+ * @param {string} swaggerPropertySchema.format
+ * @param {Object|string} swaggerPropertySchema.items
  * @returns {*}
  */
 function getSequalizeType(swaggerPropertySchema) {
@@ -27,17 +48,21 @@ function getSequalizeType(swaggerPropertySchema) {
 	if (swaggerPropertySchema.properties) {
 		console.log('Warning: encountered', JSON.stringify(swaggerPropertySchema.properties));
 		console.log('Cannot handle complex subschemas (yet?), falling back to blob');
-		return Sequelize.BLOB
+		return Sequelize.BLOB;
 	}
 
 	if (swaggerPropertySchema.$ref) {
 		console.log('Warning: encountered', JSON.stringify(swaggerPropertySchema.$ref));
 		console.log('Cannot handle $ref (yet?), falling back to blob');
-		return Sequelize.BLOB
+		return Sequelize.BLOB;
+	}
+
+	if (swaggerPropertySchema.enum) {
+		return Sequelize.ENUM.apply(null, swaggerPropertySchema.enum);
 	}
 
 	// as seen http://swagger.io/specification/#dataTypeType
-	switch ((typeof swaggerPropertySchema === 'string') ? swaggerPropertySchema : swaggerPropertySchema.type) {
+	switch (swaggerPropertySchema.type) {
 		case 'string':
 			switch (swaggerPropertySchema.format || "") {
 				case 'byte':
