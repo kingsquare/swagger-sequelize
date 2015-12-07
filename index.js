@@ -77,7 +77,25 @@ function getSequalizeType(swaggerPropertySchema) {
 					return Sequelize.DATE;
 
 				default:
-					return Sequelize.STRING;
+					if (swaggerPropertySchema.maxLength) {
+						// http://stackoverflow.com/questions/13932750/tinytext-text-mediumtext-and-longtext-maximum-sto
+						// http://stackoverflow.com/questions/7755629/varchar255-vs-tinytext-tinyblob-and-varchar65535-v
+						// NOTE: text may be in multibyte format!
+						if (swaggerPropertySchema.maxLength > 5592415) {
+							return Sequelize.TEXT('long');
+						}
+
+						if (swaggerPropertySchema.maxLength > 21845) {
+							return Sequelize.TEXT('medium');
+						}
+
+						// NOTE: VARCHAR(255) may container 255 multibyte chars: it's _NOT_ byte delimited
+						if (swaggerPropertySchema.maxLength > 255) {
+							return Sequelize.TEXT();
+						}
+					}
+
+					return Sequelize.STRING; // === VARCHAR
 			}
 
 		case 'array':
