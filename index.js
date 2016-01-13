@@ -70,7 +70,7 @@ function getSequalizeType(swaggerPropertySchema) {
 					return Sequelize.STRING.BINARY;
 
 				case 'date':
-					return Sequelize.DATE;
+					return Sequelize.DATEONLY;
 
 				case 'date-time':
 					//return Sequelize.DATETIME; //not working?
