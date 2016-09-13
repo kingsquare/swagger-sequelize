@@ -67,6 +67,18 @@ function getSequalizeType(swaggerPropertySchema) {
 			switch (swaggerPropertySchema.format || "") {
 				case 'byte':
 				case 'binary':
+					if (swaggerPropertySchema.maxLength > 5592415) {
+						return Sequelize.BLOB('long');
+					}
+
+					if (swaggerPropertySchema.maxLength > 21845) {
+						return Sequelize.BLOB('medium');
+					}
+
+					// NOTE: VARCHAR(255) may container 255 multibyte chars: it's _NOT_ byte delimited
+					if (swaggerPropertySchema.maxLength > 255) {
+						return Sequelize.BLOB();
+					}
 					return Sequelize.STRING.BINARY;
 
 				case 'date':
