@@ -153,6 +153,9 @@ function generate (schema) {
 	Object.keys(result).forEach((propertyName) => {
 		var propertySchema = result[propertyName];
 		propertySchema.type = getSequalizeType(propertySchema);
+		if (propertySchema.default) {
+			propertySchema.defaultValue = propertySchema.default;
+		}
 	});
 
 	return result;
