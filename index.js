@@ -124,9 +124,15 @@ function getSequalizeType(swaggerPropertySchema) {
 		case 'integer':
 			switch (swaggerPropertySchema.format || "") {
 				case 'int32':
+					if (typeof swaggerPropertySchema.minimum === "number" && swaggerPropertySchema.minimum >= 0) {
+						return Sequelize.INTEGER.UNSIGNED;
+					}
 					return Sequelize.INTEGER;
 
 				default:
+					if (typeof swaggerPropertySchema.minimum === "number" && swaggerPropertySchema.minimum >= 0) {
+						return Sequelize.BIGINT.UNSIGNED;
+					}
 					return Sequelize.BIGINT;
 			}
 
