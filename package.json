@@ -1,6 +1,6 @@
 {
   "name": "swagger-sequelize",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Generate Sequelize model definitions from a Swagger 2.0 schema",
   "main": "index.js",
   "scripts": {
@@ -10,13 +10,13 @@
   "repository": "https://github.com/kingsquare/swagger-sequelize",
   "license": "MIT",
   "devDependencies": {
-    "bluebird": "^3.0.5",
-    "nodeunit": "^0.9.1"
+    "bluebird": "^3.5.0",
+    "nodeunit": "^0.11.0"
   },
   "peerDependencies": {
     "sequelize": "*"
   },
   "engines": {
-    "node": "^6"
+    "node": ">=6"
   }
 }
