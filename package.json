@@ -10,8 +10,8 @@
   "repository": "https://github.com/kingsquare/swagger-sequelize",
   "license": "MIT",
   "devDependencies": {
-    "bluebird": "^3.5.0",
-    "nodeunit": "^0.11.0"
+    "bluebird": "^3.5.1",
+    "nodeunit": "^0.11.1"
   },
   "peerDependencies": {
     "sequelize": "*"
