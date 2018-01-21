@@ -159,12 +159,12 @@ function generate (schema) {
 	Object.keys(result).forEach((propertyName) => {
 		var propertySchema = result[propertyName];
 
-		// BEGIN: Promote id-Integer-Attribute to primaryKey with autoIncrement
-		if(propertyName.toLowerCase()=="id") {
+		// BEGIN: Promote Attribute to primaryKey with autoIncrement
+		if(propertySchema['x-primary-key'] === true) {
 			propertySchema.primaryKey = true;
 			propertySchema.autoIncrement = true;
 		}
-		// END: Promote id-Integer-Attribute to primaryKey with autoIncrement
+		// END: Promote Attribute to primaryKey with autoIncrement
 
 		propertySchema.type = getSequalizeType(propertySchema);
 		if (propertySchema.default) {

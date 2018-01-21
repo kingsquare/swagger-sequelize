@@ -43,3 +43,33 @@ To be consistent, one should "officially" add js-yaml to the project:
 ```
 npm install --save js-yaml
 ```
+
+## Primary key
+
+To make your primary key work in Sequelize one may need to mark `"x-primary-key": true` in the model definition in `swagger.json`:
+
+```JSON
+"definitions": {
+    "Document": {
+        "properties": {
+            "id": {
+                "type": "integer",
+                "format": "int32",
+                "description": "Unique Identifier representing a document",
+                "x-primary-key": true
+            },
+```
+
+And in `swagger.yaml`, it would be:
+
+```YAML
+definitions:
+  # Model definition
+  Document:
+    properties:
+      id:
+        type: integer
+        format: int32
+        description: Unique Identifier representing a document
+        x-primary-key: true
+```
