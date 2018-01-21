@@ -10,7 +10,7 @@ Currently, the project simply maps Swagger-datatypes to their Sequelize counterp
 
 Sample usage:
 
-```
+```js
 var swaggerSequelize = require('swagger-sequelize');
 var fs = require('fs');
 var Sequelize = require('sequelize');
@@ -24,4 +24,22 @@ var MyModel =  sequelize.define('MyModel', swaggerSequelize.generate(swaggerSpec
 
 MyModel.sync({force: true})
 
+```
+
+In case you want to read from a `swagger.yaml` rather than from a `swagger.json`, you could replace the JSON-import
+
+```js
+var swaggerSpec = JSON.parse(fs.readFileSync('<your swagger.sjon>', 'utf-8'));
+```
+
+with a YAML-import
+```js
+var yaml = require('js-yaml');
+var swaggerSpec = yaml.safeLoad(fs.readFileSync('<your swagger.yaml>', 'utf8'));
+```
+
+To be consistent, one should "officially" add js-yaml to the project:
+
+```
+npm install --save js-yaml
 ```
