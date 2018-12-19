@@ -167,7 +167,7 @@ function generate (schema) {
 		// END: Promote Attribute to primaryKey with autoIncrement
 
 		propertySchema.type = getSequalizeType(propertySchema);
-		if (propertySchema.default) {
+		if (propertySchema.default !== undefined) {
 			propertySchema.defaultValue = propertySchema.default;
 		}
 	});
