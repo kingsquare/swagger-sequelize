@@ -13,18 +13,21 @@
  * @property {function} Sequelize.INTEGER
  * @property {function} Sequelize.BIGINT
  */
-var Sequelize = require('sequelize');
+var Sequelize = require("sequelize");
 
-var dialect = 'mysql';
+var dialect = "mysql";
 /**
  * @param {string} newDialect
  * @returns {*}
  */
 function setDialect(newDialect) {
-	if (['mysql', 'mariadb', 'sqlite', 'postgres', 'mssql'].indexOf(newDialect) === -1) {
-		throw new Error('Unknown sequalize dialect');
-	}
-	dialect = newDialect;
+  if (
+    ["mysql", "mariadb", "sqlite", "postgres", "mssql"].indexOf(newDialect) ===
+    -1
+  ) {
+    throw new Error("Unknown sequalize dialect");
+  }
+  dialect = newDialect;
 }
 
 /**
@@ -39,140 +42,162 @@ function setDialect(newDialect) {
  * @returns {*}
  */
 function getSequalizeType(swaggerPropertySchema) {
-	if (typeof swaggerPropertySchema === 'string') {
-		swaggerPropertySchema = {
-			type: swaggerPropertySchema
-		}
-	}
+  if (typeof swaggerPropertySchema === "string") {
+    swaggerPropertySchema = {
+      type: swaggerPropertySchema
+    };
+  }
 
-	if (swaggerPropertySchema.properties) {
-		console.log('Warning: encountered', JSON.stringify(swaggerPropertySchema.properties));
-		console.log('Cannot handle complex subschemas (yet?), falling back to blob');
-		return Sequelize.BLOB;
-	}
+  if (swaggerPropertySchema.properties) {
+    console.log(
+      "Warning: encountered",
+      JSON.stringify(swaggerPropertySchema.properties)
+    );
+    console.log(
+      "Cannot handle complex subschemas (yet?), falling back to blob"
+    );
+    return Sequelize.BLOB;
+  }
 
-	if (swaggerPropertySchema.$ref) {
-		console.log('Warning: encountered', JSON.stringify(swaggerPropertySchema.$ref));
-		console.log('Cannot handle $ref (yet?), falling back to blob');
-		return Sequelize.BLOB;
-	}
+  if (swaggerPropertySchema.$ref) {
+    console.log(
+      "Warning: encountered",
+      JSON.stringify(swaggerPropertySchema.$ref)
+    );
+    console.log("Cannot handle $ref (yet?), falling back to blob");
+    return Sequelize.BLOB;
+  }
 
-	if (swaggerPropertySchema.enum) {
-		return Sequelize.ENUM.apply(null, swaggerPropertySchema.enum);
-	}
+  if (swaggerPropertySchema.enum) {
+    return Sequelize.ENUM.apply(null, swaggerPropertySchema.enum);
+  }
 
-	// as seen http://swagger.io/specification/#dataTypeType
-	switch (swaggerPropertySchema.type) {
-		case 'string':
-			switch (swaggerPropertySchema.format || "") {
-				case 'byte':
-				case 'binary':
-					if (swaggerPropertySchema.maxLength > 5592415) {
-						return Sequelize.BLOB('long');
-					}
+  // as seen http://swagger.io/specification/#dataTypeType
+  switch (swaggerPropertySchema.type) {
+    case "string":
+      switch (swaggerPropertySchema.format || "") {
+        case "byte":
+        case "binary":
+          if (swaggerPropertySchema.maxLength > 5592415) {
+            return Sequelize.BLOB("long");
+          }
 
-					if (swaggerPropertySchema.maxLength > 21845) {
-						return Sequelize.BLOB('medium');
-					}
+          if (swaggerPropertySchema.maxLength > 21845) {
+            return Sequelize.BLOB("medium");
+          }
 
-					// NOTE: VARCHAR(255) may container 255 multibyte chars: it's _NOT_ byte delimited
-					if (swaggerPropertySchema.maxLength > 255) {
-						return Sequelize.BLOB();
-					}
-					return Sequelize.STRING.BINARY;
+          // NOTE: VARCHAR(255) may container 255 multibyte chars: it's _NOT_ byte delimited
+          if (swaggerPropertySchema.maxLength > 255) {
+            return Sequelize.BLOB();
+          }
+          return Sequelize.STRING.BINARY;
 
-				case 'date':
-					return Sequelize.DATEONLY;
+        case "date":
+          return Sequelize.DATEONLY;
 
-				case 'date-time':
-					//return Sequelize.DATETIME; //not working?
-					return Sequelize.DATE;
+        case "date-time":
+          //return Sequelize.DATETIME; //not working?
+          return Sequelize.DATE;
 
-				default:
-					if (swaggerPropertySchema.maxLength) {
-						// http://stackoverflow.com/questions/13932750/tinytext-text-mediumtext-and-longtext-maximum-sto
-						// http://stackoverflow.com/questions/7755629/varchar255-vs-tinytext-tinyblob-and-varchar65535-v
-						// NOTE: text may be in multibyte format!
-						if (swaggerPropertySchema.maxLength > 5592415) {
-							return Sequelize.TEXT('long');
-						}
+        default:
+          if (swaggerPropertySchema.maxLength) {
+            // http://stackoverflow.com/questions/13932750/tinytext-text-mediumtext-and-longtext-maximum-sto
+            // http://stackoverflow.com/questions/7755629/varchar255-vs-tinytext-tinyblob-and-varchar65535-v
+            // NOTE: text may be in multibyte format!
+            if (swaggerPropertySchema.maxLength > 5592415) {
+              return Sequelize.TEXT("long");
+            }
 
-						if (swaggerPropertySchema.maxLength > 21845) {
-							return Sequelize.TEXT('medium');
-						}
+            if (swaggerPropertySchema.maxLength > 21845) {
+              return Sequelize.TEXT("medium");
+            }
 
-						// NOTE: VARCHAR(255) may container 255 multibyte chars: it's _NOT_ byte delimited
-						if (swaggerPropertySchema.maxLength > 255) {
-							return Sequelize.TEXT();
-						}
-					}
+            // NOTE: VARCHAR(255) may container 255 multibyte chars: it's _NOT_ byte delimited
+            if (swaggerPropertySchema.maxLength > 255) {
+              return Sequelize.TEXT();
+            }
+          }
 
-					return Sequelize.STRING; // === VARCHAR
-			}
+          return Sequelize.STRING; // === VARCHAR
+      }
 
-		case 'array':
-			if (dialect === 'postgres') {
-				return Sequelize.ARRAY(getSequalizeType(swaggerPropertySchema.items));
-			}
-			console.log('Warning: encountered', JSON.stringify(swaggerPropertySchema));
-			console.log('Can only handle array for postgres (yet?), see http://docs.sequelizejs.com/en/latest/api/datatypes/#array, falling back to blob');
-			return Sequelize.BLOB;
+    case "array":
+      if (dialect === "postgres") {
+        return Sequelize.ARRAY(getSequalizeType(swaggerPropertySchema.items));
+      }
+      console.log(
+        "Warning: encountered",
+        JSON.stringify(swaggerPropertySchema)
+      );
+      console.log(
+        "Can only handle array for postgres (yet?), see http://docs.sequelizejs.com/en/latest/api/datatypes/#array, falling back to blob"
+      );
+      return Sequelize.BLOB;
 
-		case 'boolean':
-			return Sequelize.BOOLEAN;
+    case "boolean":
+      return Sequelize.BOOLEAN;
 
-		case 'integer':
-			switch (swaggerPropertySchema.format || "") {
-				case 'int32':
-					if (typeof swaggerPropertySchema.minimum === "number" && swaggerPropertySchema.minimum >= 0) {
-						return Sequelize.INTEGER.UNSIGNED;
-					}
-					return Sequelize.INTEGER;
+    case "integer":
+      switch (swaggerPropertySchema.format || "") {
+        case "int32":
+          if (
+            typeof swaggerPropertySchema.minimum === "number" &&
+            swaggerPropertySchema.minimum >= 0
+          ) {
+            return Sequelize.INTEGER.UNSIGNED;
+          }
+          return Sequelize.INTEGER;
 
-				default:
-					if (typeof swaggerPropertySchema.minimum === "number" && swaggerPropertySchema.minimum >= 0) {
-						return Sequelize.BIGINT.UNSIGNED;
-					}
-					return Sequelize.BIGINT;
-			}
+        default:
+          if (
+            typeof swaggerPropertySchema.minimum === "number" &&
+            swaggerPropertySchema.minimum >= 0
+          ) {
+            return Sequelize.BIGINT.UNSIGNED;
+          }
+          return Sequelize.BIGINT;
+      }
 
-		case 'number':
-			switch (swaggerPropertySchema.format || "") {
-				case 'float':
-					return Sequelize.FLOAT;
+    case "number":
+      switch (swaggerPropertySchema.format || "") {
+        case "float":
+          return Sequelize.FLOAT;
 
-				default:
-					return Sequelize.DOUBLE;
-			}
+        default:
+          return Sequelize.DOUBLE;
+      }
 
-		default:
-			console.log('Warning: encountered', JSON.stringify(swaggerPropertySchema));
-			console.log('Unknown data type, falling back to blob');
-			return Sequelize.BLOB;
-	}
+    default:
+      console.log(
+        "Warning: encountered",
+        JSON.stringify(swaggerPropertySchema)
+      );
+      console.log("Unknown data type, falling back to blob");
+      return Sequelize.BLOB;
+  }
 }
 
-function generate (schema) {
-	//poor mans deep-clone
-	var result = JSON.parse(JSON.stringify(schema.properties));
+function generate(schema) {
+  //poor mans deep-clone
+  var result = JSON.parse(JSON.stringify(schema.properties));
 
-	Object.keys(result).forEach((propertyName) => {
-		var propertySchema = result[propertyName];
+  Object.keys(result).forEach(propertyName => {
+    var propertySchema = result[propertyName];
 
-		// BEGIN: Promote Attribute to primaryKey with autoIncrement
-		if(propertySchema['x-primary-key'] === true) {
-			propertySchema.primaryKey = true;
-			propertySchema.autoIncrement = true;
-		}
-		// END: Promote Attribute to primaryKey with autoIncrement
+    // BEGIN: Promote Attribute to primaryKey with autoIncrement
+    if (propertySchema["x-primary-key"] === true) {
+      propertySchema.primaryKey = true;
+      propertySchema.autoIncrement = true;
+    }
+    // END: Promote Attribute to primaryKey with autoIncrement
 
-		propertySchema.type = getSequalizeType(propertySchema);
-		if (propertySchema.default !== undefined) {
-			propertySchema.defaultValue = propertySchema.default;
-		}
-	});
+    propertySchema.type = getSequalizeType(propertySchema);
+    if (propertySchema.default !== undefined) {
+      propertySchema.defaultValue = propertySchema.default;
+    }
+  });
 
-	return result;
+  return result;
 }
 
 module.exports = { setDialect, generate };
