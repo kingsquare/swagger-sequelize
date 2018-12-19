@@ -1,6 +1,6 @@
 {
   "name": "swagger-sequelize",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Generate Sequelize model definitions from a Swagger 2.0 schema",
   "main": "index.js",
   "scripts": {
