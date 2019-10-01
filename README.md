@@ -103,3 +103,13 @@ definitions:
         format: uuid
         default: Sequelize.UUIDV4
 ```
+#### Quick setup to run tests
+
+- Install docker
+- Run
+
+```
+docker run --rm -it --name mariadb -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=db -e MYSQL_USER=user -e MYSQL_PASSWORD=password -p 3306:3306 mariadb
+DATABASE_URI=mariadb://user:password@localhost/db npm run test
+
+``` 

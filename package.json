@@ -11,11 +11,10 @@
   "license": "MIT",
   "devDependencies": {
     "bluebird": "^3.5.1",
-    "nodeunit": "^0.11.1",
-    "prettier": "^1.15.3"
-  },
-  "peerDependencies": {
-    "sequelize": "*"
+    "mariadb": "^2.1.1",
+    "nodeunit": "^0.11.3",
+    "prettier": "^1.15.3",
+    "sequelize": "^5.19.1"
   },
   "engines": {
     "node": ">=6"
