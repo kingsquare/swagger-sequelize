@@ -184,16 +184,26 @@ function generate(schema) {
   Object.keys(result).forEach(propertyName => {
     var propertySchema = result[propertyName];
 
-    // BEGIN: Promote Attribute to primaryKey with autoIncrement
-    if (propertySchema["x-primary-key"] === true) {
+    if (propertySchema["x-primary-key"]) {
       propertySchema.primaryKey = true;
+    }
+    if (propertySchema["x-autoincrement"]) {
       propertySchema.autoIncrement = true;
     }
-    // END: Promote Attribute to primaryKey with autoIncrement
+    if (propertySchema["x-unique"]) {
+      propertySchema.unique = propertySchema["x-unique"];
+    }
+    if (propertySchema["x-allow-null"] !== undefined) {
+      propertySchema.allowNull = propertySchema["x-allow-null"];
+    }
 
     propertySchema.type = getSequalizeType(propertySchema);
     if (propertySchema.default !== undefined) {
-      propertySchema.defaultValue = propertySchema.default;
+      if (propertySchema.format === "uuid") {
+        propertySchema.defaultValue = eval(propertySchema.default);
+      } else {
+        propertySchema.defaultValue = propertySchema.default;
+      }
     }
   });
 

@@ -73,3 +73,33 @@ definitions:
         description: Unique Identifier representing a document
         x-primary-key: true
 ```
+
+## Additional parametrization
+
+In the same way as with `x-primary-key`, you can parameterize the attributes `x-autoincrement`, `x-unique` and `x-allow-null`
+
+## Default value for UUID fields
+
+It is possible to set default values for fields with `uuid` format
+##### JSON
+```JSON
+"definitions": {
+    "Document": {
+        "properties": {
+            "id": {
+                "type": "string",
+                "format": "uuid",
+                "default": "Sequelize.UUIDV4"
+            },
+```
+##### YAML
+```YAML
+definitions:
+  # Model definition
+  Document:
+    properties:
+      id:
+        type: string
+        format: uuid
+        default: Sequelize.UUIDV4
+```
