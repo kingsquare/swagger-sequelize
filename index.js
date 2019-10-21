@@ -100,7 +100,7 @@ function getSequalizeType(swaggerPropertySchema) {
           //return Sequelize.DATETIME; //not working?
           return Sequelize.DATE;
 
-        case 'uuid':
+        case "uuid":
           return Sequelize.UUID;
 
         default:
