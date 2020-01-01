@@ -16,7 +16,7 @@ var fs = require('fs');
 var Sequelize = require('sequelize');
 
 var sequelize = new Sequelize('<your uri>');
-var swaggerSpec = JSON.parse(fs.readFileSync('<your swagger.sjon>', 'utf-8'));
+var swaggerSpec = JSON.parse(fs.readFileSync('<your swagger.json>', 'utf-8'));
 
 var MyModel =  sequelize.define('MyModel', swaggerSequelize.generate(swaggerSpec.definitions.MyModel));
 
@@ -29,7 +29,7 @@ MyModel.sync({force: true})
 In case you want to read from a `swagger.yaml` rather than from a `swagger.json`, you could replace the JSON-import
 
 ```js
-var swaggerSpec = JSON.parse(fs.readFileSync('<your swagger.sjon>', 'utf-8'));
+var swaggerSpec = JSON.parse(fs.readFileSync('<your swagger.json>', 'utf-8'));
 ```
 
 with a YAML-import
