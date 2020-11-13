@@ -13,6 +13,7 @@
  * @property {function} Sequelize.INTEGER
  * @property {function} Sequelize.BIGINT
  * @property {function} Sequelize.UUID
+ * @property {function} Sequelize.JSONB
  */
 var Sequelize = require("sequelize");
 
@@ -102,6 +103,9 @@ function getSequalizeType(swaggerPropertySchema) {
 
         case "uuid":
           return Sequelize.UUID;
+
+        case "jsonb":
+          return Sequelize.JSONB;
 
         default:
           if (swaggerPropertySchema.maxLength) {
